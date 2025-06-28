@@ -1,0 +1,20 @@
+[
+    {
+        "Author": "littleblue",
+        "Name": "Blue Tools",
+        "Punchline": "Bits and pieces of everything for now",
+        "Description": "I'll write a description when i know what this will do",
+        "RepoUrl": "https://github.com/littleblue50/BlueTools",
+        "IconUrl": "https://raw.githubusercontent.com/littleblue50/BlueTools/main/images/icon.png",
+        "ApplicableVersion": "any",
+        "Tags": [
+            "diadem"
+        ],
+        "InternalName": "BlueTools",
+        "DownloadLinkInstall": "https://github.com/littleblue50/BlueTools/releases/latest/download/latest.zip",
+        "DownloadLinkUpdate": "https://github.com/littleblue50/BlueTools/releases/latest/download/latest.zip",
+        "AssemblyVersion": "0.0.1",
+        "DownloadCount": 0,
+        "LastUpdated": 1751086077840
+    }
+]
