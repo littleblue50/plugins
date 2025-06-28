@@ -53,6 +53,50 @@ async function getLatestVersionAndTotalDownloads(repoUrl) {
   return { version, totalDownloads };
 }
 
+async function getChangelog(repoUrl) {
+  const [owner, repo] = repoUrl.replace("https://github.com/", "").split("/");
+  
+  // Try to fetch CHANGELOG.md from the main branch
+  const changelogUrl = `https://raw.githubusercontent.com/${owner}/${repo}/main/CHANGELOG.md`;
+  
+  try {
+    const response = await fetch(changelogUrl);
+    if (!response.ok) {
+      return null; // No changelog file found
+    }
+    
+    const changelogContent = await response.text();
+    
+    // Strip out UNRELEASED section and return the rest as-is
+    const lines = changelogContent.split('\n');
+    let skipMode = false;
+    let resultLines = [];
+    
+    for (const line of lines) {
+      if (line.startsWith('UNRELEASED:')) {
+        skipMode = true;
+        continue;
+      }
+      
+      // Start including lines when we hit a version (starts with 'v')
+      if (line.startsWith('v') && line.includes('(') && line.includes(')')) {
+        skipMode = false;
+      }
+      
+      if (!skipMode) {
+        resultLines.push(line);
+      }
+    }
+    
+    let formattedChangelog = resultLines.join('\n').trim();
+    
+    return formattedChangelog || null;
+  } catch (error) {
+    console.log(`Could not fetch changelog for ${repoUrl}: ${error.message}`);
+    return null;
+  }
+}
+
 async function buildCombinedManifest(sourceFilePath, outputFilePath) {
   const sourceData = JSON.parse(await fs.readFile(sourceFilePath, "utf8"));
   let existingManifest = [];
@@ -78,6 +122,9 @@ async function buildCombinedManifest(sourceFilePath, outputFilePath) {
     const { version: latestVersion, totalDownloads } =
       await getLatestVersionAndTotalDownloads(repoUrl);
     const downloadLink = `${repoUrl}/releases/latest/download/latest.zip`;
+    
+    // Fetch changelog for this repo
+    const changelog = await getChangelog(repoUrl);
 
     const existingEntry = existingManifest.find((e) => e.RepoUrl === repoUrl);
     const versionChanged =
@@ -101,6 +148,11 @@ async function buildCombinedManifest(sourceFilePath, outputFilePath) {
         ? Date.now()
         : existingEntry?.LastUpdated ?? Date.now(),
     };
+
+    // Add changelog if available
+    if (changelog) {
+      enriched.Changelog = changelog;
+    }
 
     combined.push(enriched);
   }
