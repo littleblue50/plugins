@@ -15,6 +15,7 @@
         "DownloadLinkUpdate": "https://github.com/littleblue50/BlueTools/releases/latest/download/latest.zip",
         "AssemblyVersion": "0.0.2",
         "DownloadCount": 1,
-        "LastUpdated": 1751128847022
+        "LastUpdated": 1751128847022,
+        "Changelog": "v0.0.2 (2025-06-29)\n- Now changes you to a gatherer before entering diadem if you are not one.\n- Changes to fisher if you start fishing\n- Fixed a bug where stopping during fishing wouldnt stop you casting\n- Fixed a bug where sometimes it wouldnt select yes to travel to diadem\n\nv0.0.1 (2025-06-28)\n- Added Grade 2 and 3 Diadem fishing\n- First version so everything is alpha right now - expect bugs!"
     }
 ]
